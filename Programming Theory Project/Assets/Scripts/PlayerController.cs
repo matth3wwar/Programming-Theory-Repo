@@ -6,22 +6,12 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] GameObject player;
     [SerializeField] GameObject[] playerColors;
-    [SerializeField] GameObject platform;
     [SerializeField] GameObject[] platformColors;
-    [SerializeField] GameObject topLine;
-    [SerializeField] GameObject botLine;
     Rigidbody2D playerRb;
 
     float initialSpeed = 5.0f;
-    float lineSpeed = 0.5f;
-    float platformSpeed = 0.1f;
-    float lineBound = 15.2f;
-    float platformBound = 6;
     int colorIndex;
     int colorToDelete = 6;
-
-    Vector3 topStartPos;
-    Vector3 botStartPos;
 
     string playerColor;
     string platformColor;
@@ -29,20 +19,19 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         playerRb = player.GetComponent<Rigidbody2D>();
-        playerRb.AddForce(new Vector2(-0.5f, -1) * initialSpeed, ForceMode2D.Impulse);
 
-        topStartPos = topLine.transform.position;
-        botStartPos = botLine.transform.position;
+        StartGame();
+    }
+
+
+    // All methods bellow make use of abstraction for using them easily in start and collision methods
+
+    void StartGame()
+    {
+        playerRb.AddForce(new Vector2(-0.5f, -1) * initialSpeed, ForceMode2D.Impulse);
 
         colorToDelete = 6;
         UpdatePlatformColor();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        MoveLine();
-        MovePlatform();
     }
 
     void UpdatePlayerColor()
@@ -89,35 +78,6 @@ public class PlayerController : MonoBehaviour
         {
             platformColor = "Purple";
             platformColors[colorIndex].SetActive(true);
-        }
-    }
-
-    void MoveLine()
-    {
-        float horizontalInput = Input.GetAxis("Mouse X");
-        topLine.transform.Translate(Vector2.right * -horizontalInput * lineSpeed);
-        botLine.transform.Translate(Vector2.right * horizontalInput * lineSpeed);
-
-        
-        if (botLine.transform.position.x >= lineBound || botLine.transform.position.x <= -lineBound)
-        {
-            topLine.transform.position = topStartPos;
-            botLine.transform.position = botStartPos;
-        }
-    }
-
-    void MovePlatform()
-    {
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        platform.transform.Translate(Vector2.right * horizontalInput * platformSpeed);
-
-        if (platform.transform.position.x >= platformBound)
-        {
-            platform.transform.position = new Vector3(platformBound, platform.transform.position.y, platform.transform.position.z);
-        }
-        if (platform.transform.position.x <= -platformBound)
-        {
-            platform.transform.position = new Vector3(-platformBound, platform.transform.position.y, platform.transform.position.z);
         }
     }
 

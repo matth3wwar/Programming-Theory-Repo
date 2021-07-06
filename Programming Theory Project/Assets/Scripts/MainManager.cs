@@ -6,6 +6,7 @@ using UnityEngine.IO;
 
 public class MainManager : MonoBehaviour
 {
+    // Encapsulation
     public static MainManager Instance { get; private set; }
 
     public bool circleGame;
