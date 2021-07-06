@@ -8,6 +8,9 @@ TagManager:
   - Red
   - Yellow
   - Green
+  - Orange
+  - Purple
+  - Wall
   layers:
   - Default
   - TransparentFX
