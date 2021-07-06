@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject easyRoulete;
     [SerializeField] GameObject normalRoulete;
     [SerializeField] GameObject hardRoulete;
+    [SerializeField] GameObject botLine;
+    [SerializeField] GameObject topLine;
 
     bool isGameActive;
 
@@ -59,21 +61,10 @@ public class GameManager : MonoBehaviour
 
     void StartLineGame()
     {
-        SceneManager.LoadScene(1);
         Cursor.lockState = CursorLockMode.Locked;
 
-        if (MainManager.Instance.easyMode)
-        {
-            EasyMode();
-        }
-        else if (MainManager.Instance.normalMode)
-        {
-            NormalMode();
-        }
-        else if (MainManager.Instance.hardMode)
-        {
-            HardMode();
-        }
+        topLine.SetActive(true);
+        botLine.SetActive(true);
     }
 
     void GameOver()
