@@ -8,6 +8,11 @@ public class Platform : MoveObject
 
     // Inheritance & Polymorphism
     
+    void Start()
+    {
+        FindGameManager();
+    }
+
     void Update()
     {
         Move(platform);

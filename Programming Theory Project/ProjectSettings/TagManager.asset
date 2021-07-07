@@ -11,6 +11,7 @@ TagManager:
   - Orange
   - Purple
   - Wall
+  - Ground
   layers:
   - Default
   - TransparentFX

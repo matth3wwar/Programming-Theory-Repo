@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    GameManager gameManager;
+
     [SerializeField] GameObject player;
-    [SerializeField] GameObject[] playerColors;
-    [SerializeField] GameObject[] platformColors;
+    public GameObject[] playerColors;
+    public GameObject[] platformColors;
     Rigidbody2D playerRb;
 
-    float initialSpeed = 5.0f;
+    public float initialSpeed = 5.0f;
     int colorIndex;
-    int colorToDelete = 6;
+    public int colorToDelete = 6;
+    Vector3 playerStartPos;
 
     string playerColor;
     string platformColor;
@@ -19,19 +22,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         playerRb = player.GetComponent<Rigidbody2D>();
-
-        StartGame();
-    }
-
-
-    // All methods bellow make use of abstraction for using them easily in start and collision methods
-
-    void StartGame()
-    {
-        playerRb.AddForce(new Vector2(-0.5f, -1) * initialSpeed, ForceMode2D.Impulse);
-
-        colorToDelete = 6;
-        UpdatePlatformColor();
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
     }
 
     void UpdatePlayerColor()
@@ -44,7 +35,7 @@ public class PlayerController : MonoBehaviour
         playerColors[colorIndex].SetActive(true);
     }
 
-    void UpdatePlatformColor()
+    public void UpdatePlatformColor()
     {
         platformColors[colorIndex].SetActive(false);
         colorIndex = Random.Range(0, 6);
@@ -83,15 +74,24 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D color)
     {
-        if (!color.gameObject.CompareTag(playerColor))
+        if (color.gameObject.CompareTag(playerColor))
         {
-            Debug.Log("Game Over");
+            gameManager.AddScore(5);
+        }
+        else
+        {
+            gameManager.DamagePlayer(1);
         }
     }
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (!col.gameObject.CompareTag("Wall"))
+        if (!col.gameObject.CompareTag("Wall") && col.gameObject.CompareTag("Ground"))
+        {
+            gameManager.DamagePlayer(gameManager.lives);
+            gameManager.GameOver();
+        }
+        else if (!col.gameObject.CompareTag("Wall"))
         {
             UpdatePlayerColor();
             UpdatePlatformColor();

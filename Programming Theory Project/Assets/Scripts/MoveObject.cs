@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MoveObject : MonoBehaviour
 {
+    public GameManager gameManager;
 
     public float lineSpeed = 0.5f;
     public float platformSpeed = 0.1f;
@@ -15,6 +16,11 @@ public class MoveObject : MonoBehaviour
 
     // Polymorphism
 
+    protected void FindGameManager()
+    {
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+    }
+
     protected void SetStartPos(GameObject line)
     {
         startPos = line.transform.position;
@@ -22,14 +28,29 @@ public class MoveObject : MonoBehaviour
 
     protected virtual void Move(GameObject line, int moveDirection)
     {
-        float horizontalInput = Input.GetAxis("Mouse X");
-        line.transform.Translate(Vector2.right * horizontalInput * lineSpeed * moveDirection);
+        if (gameManager != null)
+        {
+            if (gameManager.isGameActive && !gameManager.isGameOver)
+            {
+                float horizontalInput = Input.GetAxis("Mouse X");
+                line.transform.Translate(Vector2.right * horizontalInput * lineSpeed * moveDirection);
+            }
+        }
+        else
+        {
+            float horizontalInput = Input.GetAxis("Mouse X");
+            line.transform.Translate(Vector2.right * horizontalInput * lineSpeed * moveDirection);
+        }
+        
     }
 
     protected virtual void Move(GameObject platform)
     {
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        platform.transform.Translate(Vector2.right * horizontalInput * platformSpeed);
+        if (gameManager.isGameActive && !gameManager.isGameOver)
+        {
+            float horizontalInput = Input.GetAxisRaw("Horizontal");
+            platform.transform.Translate(Vector2.right * horizontalInput * platformSpeed);
+        }
     }
 
     public virtual void SetBounds(GameObject platform)

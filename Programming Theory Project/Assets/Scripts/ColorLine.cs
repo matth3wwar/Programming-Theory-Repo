@@ -12,6 +12,7 @@ public class ColorLine : MoveObject
     void Start()
     {
         SetStartPos(line);
+        FindGameManager();
     }
 
     void Update()
